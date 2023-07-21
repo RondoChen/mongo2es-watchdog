@@ -1,0 +1,16 @@
+services:
+  mongo-monitor-demo:
+    container_name: mongo-monitor-demo
+    build:
+      context: .
+      dockerfile: dockerfile
+    image: mongo2es:1.0
+    env_file:
+      - demo.env
+    environment:
+      - mongodb_database_name=DemoDatabase
+      - mongodb_collection_name=DemoCollection
+      - run_mode=monitor
+      - es_index_name=demo-index
+      - check_interval=20
+      - my_query={"groupId":"200", "projectType":4}

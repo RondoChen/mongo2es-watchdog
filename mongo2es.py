@@ -2,16 +2,17 @@
 '''
 storage MongoDB data into Elasticsearch
 function:
-- check the connection to database before running
+- check the connection to MongoDB and ES before running
 - Monitor mode
-	- query the documents in MongoDB periodically, and index the document datas into Elasticsearch
-	- support customerize query, default is no query
+	- query the documents in MongoDB periodically(default 60 seconds), and index the documents into Elasticsearch
+	- support customerize query, default query is find({})
 	- convert MongoDB ObjectID into string
-	- make datetime data display time zone
 	- record the timestamp when the data is indexed
+	- time zone awared timestamp
 - Watcher mode
+        - storage every changes in a mongodb collection
 	- convert MongoDB ObjectID into string
-	- make datetime data display time zone
+	- time zone awared timestamp
 
 by rondochen
 '''
@@ -22,7 +23,6 @@ from time import sleep
 from datetime import datetime as dt
 import pytz
 import json
-
 
 class mongo2es():
 	def __init__(self, mongodb_url, mongodb_database_name, mongodb_collection_name, es_url, es_index_name):
