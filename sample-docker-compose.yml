@@ -1,0 +1,35 @@
+services:
+  mongo-monitor-sample:
+    restart: always
+    networks: 
+      - mongo2es
+    container_name: mongo-monitor-sample
+    build:
+      context: .
+      dockerfile: dockerfile
+    image: mongo2es:1.0
+    env_file:
+      - your-env-file.env
+    environment:
+      - mongodb_database_name=sampleDatabase
+      - mongodb_collection_name=sampleCollection
+      - run_mode=monitor
+      - es_index_name=monitor-index
+      - check_interval=20
+      - my_query={"name":"rondo"}
+  mongo-watcher-sample:
+    restart: always
+    networks: 
+      - mongo2es
+    container_name: mongo-watcher-sample
+    build:
+      context: .
+      dockerfile: dockerfile
+    image: mongo2es:1.0
+    env_file:
+      - your-env-file.env
+    environment:
+      - mongodb_database_name=sampleDatabase
+      - mongodb_collection_name=sampleCollection
+      - run_mode=watcher
+      - es_index_name=watcher-index

@@ -1,0 +1,54 @@
+services:
+  generate-demo-data:
+    networks: 
+      - mongo2es
+    container_name: generate-demo-data
+    build:
+      context: .
+      dockerfile: dockerfile
+    image: mongo2es:1.0
+    env_file:
+      - demo.env
+    command: ['python3','-u', 'generate-demo-data.py']
+  mongo-monitor-demo:
+    restart: always
+    networks: 
+      - mongo2es
+    container_name: mongo-monitor-demo
+    depends_on:
+      - generate-demo-data
+    build:
+      context: .
+      dockerfile: dockerfile
+    image: mongo2es:1.0
+    env_file:
+      - demo.env
+    environment:
+      - mongodb_database_name=demoDatabase
+      - mongodb_collection_name=demoCollection
+      - run_mode=monitor
+      - es_index_name=monitor-index
+      - check_interval=20
+      - my_query={"name":"rondo"}
+  mongo-watcher-demo:
+    restart: always
+    networks: 
+      - mongo2es
+    container_name: mongo-watcher-demo
+    depends_on:
+      - generate-demo-data
+    build:
+      context: .
+      dockerfile: dockerfile
+    image: mongo2es:1.0
+    env_file:
+      - demo.env
+    environment:
+      - mongodb_database_name=demoDatabase
+      - mongodb_collection_name=demoCollection
+      - run_mode=watcher
+      - es_index_name=watcher-index
+networks:
+  mongo2es:
+    name: mongo2es
+    external: true
